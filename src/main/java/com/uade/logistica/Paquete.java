@@ -1,6 +1,6 @@
 package com.uade.logistica;
 
-public class Paquete<T> {
+public class Paquete<T> implements Comparable<Paquete<?>> {
 
     private String id;
     private double peso;
@@ -14,9 +14,18 @@ public class Paquete<T> {
                    boolean urgente,
                    T contenido) {
 
-        this.id = id;
+        if (id == null || id.isBlank() || destino == null || destino.isBlank()) {
+            throw new IllegalArgumentException("El ID y el destino son obligatorios.");
+        }
+        if (!Double.isFinite(peso) || peso <= 0) {
+            throw new IllegalArgumentException("El peso debe ser un numero positivo y finito.");
+        }
+        if (contenido == null) {
+            throw new IllegalArgumentException("El contenido es obligatorio.");
+        }
+        this.id = id.trim();
         this.peso = peso;
-        this.destino = destino;
+        this.destino = destino.trim();
         this.urgente = urgente;
         this.contenido = contenido;
     }
@@ -39,6 +48,19 @@ public class Paquete<T> {
 
     public T getContenido() {
         return contenido;
+    }
+
+    @Override
+    public int compareTo(Paquete<?> otro) {
+        boolean esteEsPrioritario = this.isUrgente() || this.getPeso() > 50.0;
+        boolean otroEsPrioritario = otro.isUrgente() || otro.getPeso() > 50.0;
+
+        if (esteEsPrioritario && !otroEsPrioritario) { // El primero es prio y el segundo no
+            return -1;
+        } else if (!esteEsPrioritario && otroEsPrioritario) { // El segundo prio y el primero no
+            return 1;
+        }
+        return 0; // iguales
     }
 
     @Override

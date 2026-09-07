@@ -1,0 +1,23 @@
+[
+  {
+    "id": "P001",
+    "peso": 20,
+    "destino": "Rosario",
+    "urgente": false,
+    "contenido": "Notebook"
+  },
+  {
+    "id": "P002",
+    "peso": 65,
+    "destino": "Cordoba",
+    "urgente": true,
+    "contenido": "Monitor"
+  },
+  {
+    "id": "P003",
+    "peso": 35,
+    "destino": "Mendoza",
+    "urgente": false,
+    "contenido": "Teclado"
+  }
+]
