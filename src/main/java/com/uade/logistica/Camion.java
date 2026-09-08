@@ -1,13 +1,11 @@
 package com.uade.logistica;
 
-import java.util.Stack;
-
 public class Camion {
 
-    private Stack<Paquete<?>> carga;
+    private MyOwnStack<Paquete<?>> carga;
 
     public Camion() {
-        carga = new Stack<>();
+        carga = new MyOwnStack<>();
     }
 
     public void cargarPaquete(Paquete<?> paquete) {
@@ -25,5 +23,9 @@ public class Camion {
 
     public int cantidadPaquetes() {
         return carga.size();
+    }
+
+    public Paquete<?> descargarPaquete() {
+        return carga.isEmpty() ? null : carga.pop();
     }
 }
