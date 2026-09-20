@@ -1,18 +1,29 @@
 package com.uade.logistica;
 
+import java.util.List;
+
 public class Main2 {
+
     public static void main(String[] args) {
-        ArbolBinario<Integer> arbol = new ArbolBinario<>();
 
-        arbol.insert(50);
+        try {
 
-        arbol.insert(30);
-        arbol.insert(70);
-        arbol.insert(20);
-        arbol.insert(40);
-        arbol.runAudit();
-        arbol.printDepositByLevel(0);
+            List<Deposito> depositos =
+                    DepositoJsonLoader.cargarDepositos();
 
-        System.out.println("Inserciones terminadas.");
+            ArbolBinario<Deposito> arbol =
+                    new ArbolBinario<>();
+
+            for (Deposito deposito : depositos) {
+                arbol.insert(deposito);
+            }
+
+            System.out.println("Depositos cargados correctamente.");
+
+            arbol.printDepositByLevel(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

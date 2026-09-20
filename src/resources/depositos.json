@@ -1,0 +1,29 @@
+{
+  "depositos": [
+    {
+      "id": 50,
+      "nombre": "Hub Central Buenos Aires",
+      "auditado": true
+    },
+    {
+      "id": 20,
+      "nombre": "Deposito Cordoba",
+      "auditado": false
+    },
+    {
+      "id": 80,
+      "nombre": "Deposito Mendoza",
+      "auditado": false
+    },
+    {
+      "id": 10,
+      "nombre": "Deposito Rosario",
+      "auditado": true
+    },
+    {
+      "id": 30,
+      "nombre": "Deposito Santa Fe",
+      "auditado": false
+    }
+  ]
+}
