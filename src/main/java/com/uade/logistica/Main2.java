@@ -18,9 +18,9 @@ public class Main2 {
                 arbol.insert(deposito);
             }
 
-            System.out.println("Depositos cargados correctamente.");
+            System.out.println("Ejecutando auditoria...");
 
-            arbol.printDepositByLevel(1);
+            arbol.runAudit();
 
         } catch (Exception e) {
             e.printStackTrace();
