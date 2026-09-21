@@ -57,6 +57,53 @@ public class Sistema {
         ids.addAll(nuevos);
     }
 
+    public void registrarPaquete(
+            String id,
+            String peso,
+            String destino,
+            String urgente,
+            String contenido) {
+
+        if (ids.contains(id)) {
+            throw new IllegalArgumentException(
+                    "Ya existe un paquete con ese ID.");
+        }
+
+        if (!urgente.equalsIgnoreCase("s")
+                && !urgente.equalsIgnoreCase("n")) {
+
+            throw new IllegalArgumentException(
+                    "Ingrese s o n.");
+        }
+
+        if (contenido == null || contenido.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "El contenido es obligatorio.");
+        }
+
+        try {
+
+            Paquete<String> paquete =
+                    new Paquete<>(
+                            id,
+                            Double.parseDouble(
+                                    peso.replace(',', '.')),
+                            destino,
+                            urgente.equalsIgnoreCase("s"),
+                            contenido);
+
+            centro.agregarPaquete(paquete);
+
+            ids.add(paquete.getId());
+
+        } catch (NumberFormatException e) {
+
+            throw new IllegalArgumentException(
+                    "Peso invalido.");
+        }
+    }
+
     public boolean existeId(String id) {
         return ids.contains(id);
     }
