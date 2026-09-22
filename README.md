@@ -52,3 +52,10 @@ Espacio utilizado: O(n)
 - cargarInventario(): O(n)
 
 Espacio utilizado: O(n)
+## Red de depositos (ABB manual)
+
+Las opciones 7, 8 y 9 permiten cargar `depositos.json`, correr la auditoria y consultar un nivel (la raiz esta en el nivel 0). La carga reemplaza el arbol en memoria con los registros principales del arreglo `depositos`, en su orden de aparicion y ordenados por ID mediante el ABB existente. Se ignora `conexiones`; sus IDs no crean depositos adicionales. Una carga invalida conserva el arbol anterior.
+
+El formato requiere `id` entero unico, `nombre` y `auditado` booleano. Como el JSON actual no incluye fechas, se considera `auditado: true` como auditado en la fecha de carga y `false` como sin auditoria previa. Esta es una convencion: el booleano por si solo no permite saber si pasaron 30 dias. Opcionalmente se admite `fechaUltimaAuditoria` en formato ISO local (ej. `2026-08-01T12:00:00`) o `null`, que prevalece sobre esa convencion.
+
+La auditoria recorre izquierda, derecha y raiz (post-orden), y marca `visitado` solo si no hay fecha o es anterior a hace 30 dias. No cambia la fecha: identifica los depositos que requieren inspeccion. Los cambios quedan en memoria, no se escriben al JSON. El recorrido cuesta O(n); insertar cuesta O(h), con h igual a la altura del arbol.

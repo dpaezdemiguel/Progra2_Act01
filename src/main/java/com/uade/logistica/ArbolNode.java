@@ -9,8 +9,8 @@ public class ArbolNode<T> {
     ArbolNode<T> right;
     ArbolNode<T> left;
 
-    boolean visited;
-    LocalDateTime lastAudit;
+    boolean visitado;
+    LocalDateTime fechaUltimaAuditoria;
 
     public ArbolNode(T element) {
 
@@ -19,7 +19,11 @@ public class ArbolNode<T> {
 
         this.element = element;
 
-        this.visited = false;
-        this.lastAudit = LocalDateTime.now().minusDays(40);
+        this.visitado = false;
+        this.fechaUltimaAuditoria = null;
+        if (element instanceof Deposito deposito) {
+            this.visitado = deposito.isVisitado();
+            this.fechaUltimaAuditoria = deposito.getFechaUltimaAuditoria();
+        }
     }
 }

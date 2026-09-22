@@ -10,11 +10,40 @@ public class Sistema {
     private final CentroDistribucion centro;
     private final Camion camion;
     private final Set<String> ids;
+    private ArbolBinario<Deposito> depositos = new ArbolBinario<>();
 
     public Sistema() {
         this.centro = new CentroDistribucion();
         this.camion = new Camion();
         this.ids = new HashSet<>();
+    }
+
+    public Paquete<?> procesarYCargar() {
+        Paquete<?> paquete = centro.procesarSiguiente();
+        if (paquete != null) camion.cargarPaquete(paquete);
+        return paquete;
+    }
+
+    public Paquete<?> deshacerCarga() {
+        Paquete<?> paquete = camion.deshacerCarga();
+        if (paquete != null) centro.agregarPaquete(paquete);
+        return paquete;
+    }
+
+    public int cargarDepositos() throws IOException {
+        List<Deposito> cargados = DepositoJsonLoader.cargarDepositos();
+        ArbolBinario<Deposito> nuevo = new ArbolBinario<>();
+        for (Deposito deposito : cargados) nuevo.insert(deposito);
+        depositos = nuevo;
+        return cargados.size();
+    }
+
+    public void correrAuditoria() {
+        depositos.runAudit();
+    }
+
+    public void reporteNivel(int nivel) {
+        depositos.printDepositByLevel(nivel);
     }
 
     public CentroDistribucion getCentro() {

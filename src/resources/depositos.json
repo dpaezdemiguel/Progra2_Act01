@@ -3,27 +3,50 @@
     {
       "id": 50,
       "nombre": "Hub Central Buenos Aires",
-      "auditado": true
+      "auditado": true,
+      "conexiones": [
+        {
+          "id": 20,
+          "distancia": 700
+        },
+        {
+          "id": 80,
+          "distancia": 300
+        }
+      ]
     },
     {
       "id": 20,
-      "nombre": "Deposito Cordoba",
-      "auditado": false
+      "nombre": "Deposito Cordoba1",
+      "auditado": false,
+      "conexiones": [
+        {
+          "id": 50,
+          "distancia": 700
+        }
+      ]
     },
     {
       "id": 80,
-      "nombre": "Deposito Mendoza",
-      "auditado": false
+      "nombre": "Deposito Cordob2a",
+      "auditado": false,
+      "conexiones": [
+        {
+          "id": 50,
+          "distancia": 700
+        }
+      ]
     },
     {
-      "id": 10,
-      "nombre": "Deposito Rosario",
-      "auditado": true
-    },
-    {
-      "id": 30,
-      "nombre": "Deposito Santa Fe",
-      "auditado": false
+      "id": 40,
+      "nombre": "Deposito Cordoba3",
+      "auditado": false,
+      "conexiones": [
+        {
+          "id": 50,
+          "distancia": 700
+        }
+      ]
     }
   ]
 }
