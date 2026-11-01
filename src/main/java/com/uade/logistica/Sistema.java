@@ -1,6 +1,8 @@
 package com.uade.logistica;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +13,7 @@ public class Sistema {
     private final Camion camion;
     private final Set<String> ids;
     private ArbolBinario<Deposito> depositos = new ArbolBinario<>();
+    private Grafo rutas = new Grafo();
 
     public Sistema() {
         this.centro = new CentroDistribucion();
@@ -31,11 +34,22 @@ public class Sistema {
     }
 
     public int cargarDepositos() throws IOException {
-        List<Deposito> cargados = DepositoJsonLoader.cargarDepositos();
+        byte[] datos;
+        try (InputStream input = Sistema.class.getClassLoader().getResourceAsStream("depositos.json")) {
+            if (input == null) throw new IOException("No se encontro depositos.json");
+            datos = input.readAllBytes();
+        }
+        List<Deposito> cargados = DepositoJsonLoader.cargarDepositos(new ByteArrayInputStream(datos));
+        Grafo nuevasRutas = GrafoJsonLoader.cargarGrafo(new ByteArrayInputStream(datos), cargados);
         ArbolBinario<Deposito> nuevo = new ArbolBinario<>();
         for (Deposito deposito : cargados) nuevo.insert(deposito);
         depositos = nuevo;
+        rutas = nuevasRutas;
         return cargados.size();
+    }
+
+    public double distanciaMinima(int origen, int destino) {
+        return rutas.distanciaMinima(origen, destino);
     }
 
     public void correrAuditoria() {

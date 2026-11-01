@@ -29,6 +29,7 @@ public class Menu {
             System.out.println("7. Cargar deposito (depositos.json)");
             System.out.println("8. Correr auditoria");
             System.out.println("9. Reporte de niveles");
+            System.out.println("10. Consultar distancia minima entre depositos");
             System.out.println("0. Salir");
 
             String opcion = leer("Seleccione una opcion: ");
@@ -62,8 +63,25 @@ public class Menu {
                 case "7" -> cargarDepositos();
                 case "8" -> sistema.correrAuditoria();
                 case "9" -> reporteNiveles();
+                case "10" -> consultarDistancia();
                 default -> System.out.println("Opcion invalida.");
             }
+        }
+    }
+
+    private void consultarDistancia() {
+        String origen = leer("ID del deposito de origen: ");
+        if (origen == null) return;
+        String destino = leer("ID del deposito de destino: ");
+        if (destino == null) return;
+        try {
+            double distancia = sistema.distanciaMinima(Integer.parseInt(origen), Integer.parseInt(destino));
+            System.out.println(Double.isInfinite(distancia) ? "No hay ruta entre los depositos."
+                    : "Distancia minima: " + distancia + " km");
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese IDs enteros.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 

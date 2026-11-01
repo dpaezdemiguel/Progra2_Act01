@@ -54,8 +54,20 @@ Espacio utilizado: O(n)
 Espacio utilizado: O(n)
 ## Red de depositos (ABB manual)
 
-Las opciones 7, 8 y 9 permiten cargar `depositos.json`, correr la auditoria y consultar un nivel (la raiz esta en el nivel 0). La carga reemplaza el arbol en memoria con los registros principales del arreglo `depositos`, en su orden de aparicion y ordenados por ID mediante el ABB existente. Se ignora `conexiones`; sus IDs no crean depositos adicionales. Una carga invalida conserva el arbol anterior.
+Las opciones 7, 8 y 9 permiten cargar `depositos.json`, correr la auditoria y consultar un nivel (la raiz esta en el nivel 0). La carga reemplaza el arbol en memoria con los registros principales del arreglo `depositos`, en su orden de aparicion y ordenados por ID mediante el ABB existente. Las conexiones se incorporan al grafo y sus IDs deben corresponder a depositos declarados. Una carga invalida conserva el arbol y el grafo anteriores.
 
 El formato requiere `id` entero unico, `nombre` y `auditado` booleano. Como el JSON actual no incluye fechas, se considera `auditado: true` como auditado en la fecha de carga y `false` como sin auditoria previa. Esta es una convencion: el booleano por si solo no permite saber si pasaron 30 dias. Opcionalmente se admite `fechaUltimaAuditoria` en formato ISO local (ej. `2026-08-01T12:00:00`) o `null`, que prevalece sobre esa convencion.
 
 La auditoria recorre izquierda, derecha y raiz (post-orden), y marca `visitado` solo si no hay fecha o es anterior a hace 30 dias. No cambia la fecha: identifica los depositos que requieren inspeccion. Los cambios quedan en memoria, no se escriben al JSON. El recorrido cuesta O(n); insertar cuesta O(h), con h igual a la altura del arbol.
+
+## Optimizacion de rutas (Grafos)
+
+La opcion 7 carga tambien la red de rutas. La opcion 10 pide los IDs de origen y destino y muestra la distancia minima en km usando Dijkstra. Informa si un deposito no existe o si no hay ruta. Consultar el mismo deposito devuelve 0 km.
+
+El grafo usa una lista de adyacencia y comparte los objetos Deposito con el ABB. Cada conexion del JSON va desde el deposito que la declara hacia el ID indicado; para una ruta de ida y vuelta se declaran ambas conexiones. Esto conserva las distancias del archivo, incluso si cada sentido tiene un valor diferente. Las distancias deben ser finitas y no negativas. Si se repite una conexion, se conserva la menor distancia.
+
+Con V depositos y E conexiones, agregar un deposito o una conexion cuesta O(1) esperado usando mapas. El grafo ocupa O(V + E). Dijkstra selecciona el siguiente deposito mediante un recorrido simple, con tiempo O(V² + E) y espacio auxiliar O(V). Se usa esta variante para mantener una implementacion sencilla sin estructuras adicionales de prioridad.
+
+La carga del JSON y del grafo cuesta O(V + E) esperado y usa O(V + E) espacio. La carga completa tambien construye el ABB: cuesta O(Vh + E), hasta O(V² + E) si el arbol queda desbalanceado, y ocupa O(V + E).
+
+Las pruebas cubren caminos indirectos mas cortos, ciclos, distancia cero, destinos desconectados, IDs inexistentes, conexiones invalidas y la integracion con el sistema y el menu.
